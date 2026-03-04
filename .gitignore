@@ -1,0 +1,12 @@
+# Pliki obiektowe (kompilacja pośrednia)
+*.o
+
+# Pliki wykonywalne (executables)
+main
+child
+
+# Pliki tymczasowe macOS
+.DS_Store
+
+# Pliki wyjściowe Twojego programu
+output.txt
