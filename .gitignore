@@ -3,7 +3,9 @@
 
 # Pliki wykonywalne (executables)
 main
+main_vfork
 child
+cos
 
 # Pliki tymczasowe macOS
 .DS_Store
