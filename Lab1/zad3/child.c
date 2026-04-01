@@ -17,7 +17,7 @@ int main(int argc, char *argv[]) {
         }
         // zabrane z upel dokumentacji
         // Blokada wyłączna (exclusive lock — LOCK_EX)
-        // Tylko jeden proces może uzyskać dostęp do pliku (odczyt i zapis) w danym momencie.
+        // Tylko jeden proces może uzyskać dostęp do pliku (odczyt i zapis) w danym momencie
         // flock dziala na deskryptorze pliku, który pobieramy przez fileno()
         flock(fileno(file), LOCK_EX);
 

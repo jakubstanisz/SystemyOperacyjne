@@ -1,15 +1,17 @@
 #include <signal.h>
 #include <stdio.h>
-#include <string.h>
 #include <unistd.h>
+#include <stdlib.h>
 
 void obsluga(int signum){
     printf("Wywolano handler dla sygnalu %d\n", signum);
 }
+
 void sig_default(){
     printf("Wywołano funkcję 'sig_default()'\n");
     signal(SIGUSR1, SIG_DFL);
 }
+
 void sig_mask(){
     printf("Wykonano funkcje 'sig_mask()'\n");
     sigset_t blockmask;
@@ -28,9 +30,9 @@ void sig_handle(){
     printf("Wywołano funkcje 'sig_handle'\n");
     signal(SIGUSR1, obsluga);
 }
+
 void sig_unblock() {
-    /* 
-    1. Zadeklarowanie zbioru (sigset_t unblockmask;).
+    /* 1. Zadeklarowanie zbioru (sigset_t unblockmask;).
     2. Wyczyszczenie go (sigemptyset), żeby usunąć przypadkowe "śmieci" z pamięci.
     3. Dodanie konkretnego sygnału do tego czystego zbioru (sigaddset).
     4.Przekazanie zbioru do systemu z poleceniem odblokowania (sigprocmask).
@@ -40,24 +42,22 @@ void sig_unblock() {
     sigaddset(&unblockmask, SIGUSR1);
     sigprocmask(SIG_UNBLOCK, &unblockmask, NULL);
 }
-int main(int argc, char *argv[]){
-    if (argc != 2){
-        printf("Wywołanie: %s default|mask|ignore|handle\n", argv[0]);
-        return 1;
-    }
-    
-    if (strcmp(argv[1], "default") == 0) {
-        sig_default();
-    } else if (strcmp(argv[1], "mask") == 0) {
-        sig_mask();
-    } else if (strcmp(argv[1], "ignore") == 0) {
-        sig_ignore();
-    } else if (strcmp(argv[1], "handle") == 0) {
-        sig_handle();
-    } else {
-        printf("Wywołanie: %s default|mask|ignore|handle\n", argv[0]);
-        return 1;
-    }
+
+void handle_usr2(int signum, siginfo_t *info, void *context) {
+    int mode = info->si_value.sival_int;
+    if (mode == 0) sig_default();
+    else if (mode == 1) sig_ignore();
+    else if (mode == 2) sig_mask();
+    else if (mode == 3) sig_handle();
+}
+
+int main() {
+    struct sigaction sa;
+    sa.sa_sigaction = handle_usr2;
+    sa.sa_flags = SA_SIGINFO;
+    sigemptyset(&sa.sa_mask);
+    sigaction(SIGUSR2, &sa, NULL);
+
     for (int i = 1; i <= 20; i++) {
         printf("%d\n", i);
         // 5 i 15 sekunda
