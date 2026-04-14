@@ -6,6 +6,9 @@ main
 main_vfork
 child
 cos
+program1
+program2
+
 
 # Pliki tymczasowe macOS
 .DS_Store
