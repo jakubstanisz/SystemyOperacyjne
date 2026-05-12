@@ -33,13 +33,13 @@ int main() {
     pid_t pid = fork();
 
     if (pid == 0) {
-        while (1) {
+        while (1) { 
             if (msgrcv(client_queue, &msg, sizeof(struct message) - sizeof(long), MSG_TEXT, 0) > 0) {
                 printf("Klient %d: %s", msg.client_id, msg.text);
             }
         }
     } else {
-        while (1) {
+        while (1) { 
             char buffer[MAX_TEXT];
             if (fgets(buffer, MAX_TEXT, stdin) != NULL) {
                 msg.mtype = MSG_TEXT;
