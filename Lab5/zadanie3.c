@@ -111,7 +111,7 @@ void consumer(SharedData *shm, sem_t *empty_norm, sem_t *full_norm, sem_t *empty
         for (int i = 0; i < 10; i++) {
             printf("%c", my_task.data[i]);
             fflush(stdout);
-            usleep(300000); // Emulacja pracy (0.3s na znak)
+            usleep(300000); // pracy (0.3s na znak)
         }
         printf("\n");
     }
